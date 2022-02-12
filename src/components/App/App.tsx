@@ -1,5 +1,5 @@
 import React from "react";
-import './App.css'
+import "bootswatch/dist/darkly/bootstrap.min.css";
 
 export const App = (): React.ReactElement => {
     return (
