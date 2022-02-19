@@ -1,17 +1,25 @@
 import React from "react";
 import './App.css'
-import SwapiService from "../../services/SwapiService";
-import { IPerson } from "../../types";
+
+import Header from "../Header";
+import RandomPlanet from "../RandomPlanet copy 5";
+import ItemList from "../ItemList";
+import PersonDetails from "../PersonDetails";
 
 export const App = (): React.ReactElement => {
-
-    const swapiService = new SwapiService()
-
     return (
         <div className="app">
-            <header>header</header>
-            <main>main</main>
-            <footer>footer</footer>
+            <Header />
+            <RandomPlanet />
+
+            <main className="row mb2">
+                <div className="col-md-6">
+                    <ItemList />
+                </div>
+                <div className="col-md-6">
+                    <PersonDetails />
+                </div>
+            </main>
         </div>
     )
 }

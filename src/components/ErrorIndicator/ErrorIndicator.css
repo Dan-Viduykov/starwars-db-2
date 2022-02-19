@@ -1,0 +1,25 @@
+.error-indicator {
+    margin: 0 auto;
+    display: flex;
+    text-align: center;
+    align-items: center;    
+    color: orange;
+}
+
+.error-indicator img {
+    width: 120px;
+}
+
+.error-indicator img:last-child {
+    transform: scaleX(-1);
+}
+
+.error-indicator .content {
+    display: flex;
+    flex-direction: column;
+}
+
+.error-indicator .content span:first-child {
+    font-size: 28px;
+    font-weight: 600;
+}

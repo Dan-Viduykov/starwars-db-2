@@ -1,48 +1,86 @@
 /* eslint-disable no-console */
-import { IPerson } from "../../types/index";
-
+import { IPerson, PersonRequest, PlanetRequest, IPlanet, StarshipRequest, IStarship } from "../../types/index";
 
 export default class SwapiService {
 
-    _apiBase = 'https://swapi.dev/api/';
+    _apiBase = 'https://swapi.dev/api/';    
 
     async getResource<T>(url: string): Promise<T> {
-        const res = await fetch(`${this._apiBase}${url}`);
-        
-        if (!res.ok) {
-            throw new Error(`Could not fetch ${url}, received ${res.status}`)
-        } 
-        
-        return res.json();
+        const response = await fetch(`${this._apiBase}${url}`)
+
+        if (!response.ok) {
+            throw new Error(response.statusText)
+        }
+
+        return response.json()
     }
 
-    async getAllPeople() {
-        const res = await this.getResource('people/')
-        const result = res as {results: IPerson[]}
-        return result.results
+    async getAllPeople<T extends {results: PersonRequest[]}>(): Promise<IPerson[]> {
+        const people: T = await this.getResource('people/');
+        return people.results.map(this._transformPerson);
     }
 
-    getPerson(id: number): Promise<IPerson> {
-        return this.getResource(`people/${id}/`)
+    async getAllPlanets<T extends {results: PlanetRequest[]}>(): Promise<IPlanet[]> {
+        const planets: T = await this.getResource('planet/')
+        return planets.results.map(this._transformPlanet);
     }
 
-    async getAllPlanets() {
-        const res = await this.getResource('planet/')
-        const result = res as {results: IPerson[]}
-        return result.results
+    async getAllStarships<T extends {results: StarshipRequest[]}>(): Promise<IStarship[]> {
+        const starships: T = await this.getResource('starship/')
+        return starships.results.map(this._transformStarship)
     }
 
-    getPlanet(id: number): Promise<IPerson> {
-        return this.getResource(`planet/${id}/`)
+    async getPerson<T extends PersonRequest>(id: number): Promise<IPerson> {
+        const person: T = await this.getResource(`people/${id}/`)
+        return this._transformPerson(person);
     }
 
-    async getAllStarships() {
-        const res = await this.getResource('starship/')
-        const result = res as {results: IPerson[]}
-        return result.results
+    async getPlanet<T extends PlanetRequest>(id: number): Promise<IPlanet> {
+        const planet: T =  await this.getResource(`planets/${id}/`)
+        return this._transformPlanet(planet);
     }
 
-    getStarship(id: number): Promise<IPerson> {
-        return this.getResource(`starship/${id}/`)
+    async getStarship<T extends StarshipRequest>(id: number): Promise<IStarship> {
+        const starship: T = await this.getResource(`starships/${id}/`)
+        return this._transformStarship(starship);
     }
+
+    _extractId<T extends { url: string }>(planet: T): string {
+        const idRegExp = /\/([0-9]*)\/$/;
+        return planet.url.match(idRegExp)![1];
+    }
+
+    _transformPerson<T extends PersonRequest>(person: T): IPerson {
+        return {
+            id: this._extractId(person),
+            name: person.name,
+            birthYear: person.birth_year,
+            eyeColor: person.eye_color,
+            gender: person.gender,
+        }
+    }
+    
+    _transformPlanet<T extends PlanetRequest>(planet: T): IPlanet {
+        return {
+            id: this._extractId(planet),
+            name: planet.name,
+            population: planet.population,
+            rotationPeriod: planet.rotation_period,
+            diameter: planet.diameter,
+        }
+    }
+
+    _transformStarship<T extends StarshipRequest>(starship: T): IStarship {
+        return {
+            id: this._extractId(starship),
+            name: starship.name,
+            model: starship.model,
+            manufacturer: starship.manufacturer,
+            costInCredits: starship.cost_in_credits,
+            length: starship.length,
+            crew: starship.crew,
+            passengers: starship.passengers,
+            cargoCapacity: starship.cargo_capacity,
+        }
+    }    
 }
