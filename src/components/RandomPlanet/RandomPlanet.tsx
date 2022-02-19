@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SwapiService from "../../services/SwapiService";
 import { IPlanet } from "../../types";
 import ErrorIndicator from "../ErrorIndicator";
@@ -25,13 +25,21 @@ export const RandomPlanet = (): React.ReactElement => {
     }
     
     const updatePlanet = (): void => {
-        swapiService.getPlanet(Math.round(Math.random()*25000) + 2)
+        swapiService.getPlanet(Math.round(Math.random()*25) + 2)
             .then(onPlanetLoaded)
             .catch(onError)
     }
 
-    const hasData = !(loading || error)
+    useEffect(() => updatePlanet, [])
+    useEffect(() => {
+        const interval = window.setInterval(updatePlanet, 5000);
 
+        return () => {
+            clearInterval(interval);
+        }
+    },)
+
+    const hasData = !(loading || error)
     const errorMessage = error ? <ErrorIndicator /> : null
     const spinner = loading ? <Spinner /> : null
     const content = hasData ? <PlanetView planet={planet} /> : null

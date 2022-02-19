@@ -2,7 +2,7 @@ import React from "react";
 import './App.css'
 
 import Header from "../Header";
-import RandomPlanet from "../RandomPlanet copy 5";
+import RandomPlanet from "../RandomPlanet";
 import ItemList from "../ItemList";
 import PersonDetails from "../PersonDetails";
 
