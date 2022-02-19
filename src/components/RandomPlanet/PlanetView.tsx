@@ -14,7 +14,7 @@ const PlanetView = (props: { planet: Partial<IPlanet> }): React.ReactElement => 
     return (
         <>
             <img className="planet-image"
-                src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg` && ''}
+                src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}
                 alt={`Planet ${name}`} />
             <div className="card-body" key={102}>
                 <h4>{name}</h4>

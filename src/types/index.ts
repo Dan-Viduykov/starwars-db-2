@@ -56,3 +56,7 @@ export interface StarshipRequest {
     cargo_capacity: string;
     url: string;
 }
+
+export interface Error {
+    status?: number;
+}

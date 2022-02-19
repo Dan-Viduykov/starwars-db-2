@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SwapiService from "../../services/SwapiService";
-import { IPlanet } from "../../types";
+import { Error, IPlanet } from "../../types";
 import ErrorIndicator from "../ErrorIndicator";
 import Spinner from "../Spinner";
 import PlanetView from "./PlanetView";
@@ -19,7 +19,7 @@ export const RandomPlanet = (): React.ReactElement => {
 
     const onError = (err: Error) => {
         // eslint-disable-next-line no-console
-        // console.log(err.status);
+        console.log(err.status);
         setError(true);
         setLoading(false)
     }
@@ -30,7 +30,7 @@ export const RandomPlanet = (): React.ReactElement => {
             .catch(onError)
     }
 
-    useEffect(() => updatePlanet, [])
+    useEffect(() => {updatePlanet()}, [])
     useEffect(() => {
         const interval = window.setInterval(updatePlanet, 5000);
 
