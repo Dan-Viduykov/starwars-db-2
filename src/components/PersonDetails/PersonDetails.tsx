@@ -1,30 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import SwapiService from "../../services/SwapiService";
+import { IPerson } from "../../types";
+import Spinner from "../Spinner";
 import './PersonDetails.css'
+import { PersonDetailsView } from "./PersonDetailsView";
 
-export const PersonDetails = (): React.ReactElement => {
+interface PersonDetailsProps {
+    personId: number | null
+}
+
+export const PersonDetails = (props: PersonDetailsProps) => {
+    const { personId } = props
+
+    const swapiService = new SwapiService()
+    const [ person, setPerson ] = useState<Partial<IPerson> | null>(null)
+    const [ loading, setLoading ] = useState(true)
+    
+
+    const updatePerson = (): void => {
+        if (!personId) return;
+        setLoading(true)
+
+        swapiService
+            .getPerson(personId)
+            .then((res) => {
+                setPerson(res);
+                setLoading(false);
+            })
+    }
+
+    useEffect(() => updatePerson(), []);
+    useEffect(() => updatePerson(), [personId])
+
+    if (!person) {
+        return <span>Select a person from a list</span>
+    }
+
     return (
         <article className="person-details card">
-            <img
-                className="person-details__image"
-                src="https://starwars-visualguide.com/assets/img/characters/4.jpg"
-                alt="planetName" />
-            <div className="card-body">
-                <h4>Darth Vader</h4>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item">
-                        <span className="term">Gender</span>
-                        <span>male</span>
-                    </li>
-                    <li className="list-group-item">
-                        <span className="term">Birth Year</span>
-                        <span>42</span>
-                    </li>
-                    <li className="list-group-item">
-                        <span className="term">Eye Color</span>
-                        <span>Yellow</span>
-                    </li>
-                </ul>
-            </div>
+            {loading ? <Spinner /> : <PersonDetailsView person={person} />}
         </article>
     )
 }

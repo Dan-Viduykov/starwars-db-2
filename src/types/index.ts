@@ -1,5 +1,5 @@
 export interface IPerson {
-    id: string;
+    id: number;
     name: string;
     birthYear: string;
     eyeColor: string;
@@ -7,7 +7,7 @@ export interface IPerson {
 }
 
 export interface IPlanet {
-    id: string;
+    id: number;
     name: string;
     population: string;
     rotationPeriod: string;
@@ -15,7 +15,7 @@ export interface IPlanet {
 }
 
 export interface IStarship {
-    id: string;
+    id: number;
     name: string;
     model: string;
     manufacturer: string;

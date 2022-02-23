@@ -50,9 +50,9 @@ export default class SwapiService {
         return planet.url.match(idRegExp)![1];
     }
 
-    _transformPerson<T extends PersonRequest>(person: T): IPerson {
+    _transformPerson = <T extends PersonRequest>(person: T): IPerson => {
         return {
-            id: this._extractId(person),
+            id: Number(this._extractId(person)),
             name: person.name,
             birthYear: person.birth_year,
             eyeColor: person.eye_color,
@@ -60,9 +60,9 @@ export default class SwapiService {
         }
     }
     
-    _transformPlanet<T extends PlanetRequest>(planet: T): IPlanet {
+    _transformPlanet = <T extends PlanetRequest>(planet: T): IPlanet => {
         return {
-            id: this._extractId(planet),
+            id: Number(this._extractId(planet)),
             name: planet.name,
             population: planet.population,
             rotationPeriod: planet.rotation_period,
@@ -70,9 +70,9 @@ export default class SwapiService {
         }
     }
 
-    _transformStarship<T extends StarshipRequest>(starship: T): IStarship {
+    _transformStarship = <T extends StarshipRequest>(starship: T): IStarship => {
         return {
-            id: this._extractId(starship),
+            id: Number(this._extractId(starship)),
             name: starship.name,
             model: starship.model,
             manufacturer: starship.manufacturer,
