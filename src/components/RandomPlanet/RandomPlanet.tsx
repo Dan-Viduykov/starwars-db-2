@@ -33,11 +33,8 @@ export const RandomPlanet = (): React.ReactElement => {
     useEffect(() => {updatePlanet()}, [])
     useEffect(() => {
         const interval = window.setInterval(updatePlanet, 5000);
-
-        return () => {
-            clearInterval(interval);
-        }
-    },)
+        return () => { clearInterval(interval) }
+    }, [])
 
     const hasData = !(loading || error)
     const errorMessage = error ? <ErrorIndicator /> : null

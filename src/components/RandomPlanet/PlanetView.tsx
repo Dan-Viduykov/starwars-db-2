@@ -1,7 +1,11 @@
 import React from "react";
 import { IPlanet } from "../../types";
 
-const PlanetView = (props: { planet: Partial<IPlanet> }): React.ReactElement => {
+interface PlanetViewProps {
+    planet: Partial<IPlanet>
+}
+
+const PlanetView = (props: PlanetViewProps) => {
 
     const {
         id,
