@@ -60,3 +60,6 @@ export interface StarshipRequest {
 export interface Error {
     status?: number;
 }
+
+export type IObject = IPerson | IPlanet | IStarship;
+export type IObjects = IPerson[] | IPlanet[] | IStarship[];

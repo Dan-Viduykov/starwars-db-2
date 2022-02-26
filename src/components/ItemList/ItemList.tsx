@@ -1,43 +1,46 @@
 import React, { useEffect, useState } from "react";
-import SwapiService from "../../services/SwapiService";
-import { IPerson } from "../../types";
+import { IObject, IObjects } from "../../types";
 import Spinner from "../Spinner";
 import './ItemList.css'
 
 interface ItemListProps {
-    onItemSelected: (id: number) => void
+    onItemSelected: (id: number) => void;
+    getData: () => Promise<IObjects>;
+    children: (item: IObject) => string;
 }
 
-export const ItemList = (props: ItemListProps): React.ReactElement => {
-    const swapiService = new SwapiService()
-
-    const [ peopleList, setPeopleList ] = useState<Partial<IPerson[]>>([])
+export const ItemList: React.FC<ItemListProps> = (props) => {
+    const { onItemSelected, getData, children } = props
+    const [ itemList, setItemList ] = useState<Partial<IObjects>>([])
     const [ loading, setLoading ] = useState(true)
 
     useEffect(() => {
-        swapiService.getAllPeople()
-            .then((people) => {
-                setPeopleList(people)
+        getData()
+            .then((items) => {
+                setItemList(items)
                 setLoading(false)
             })
     }, [])
 
-    const renderItems = (arr: IPerson[]) => {
-        return arr.map(({id, name}: IPerson) => {
+    const renderItems = (arr: IObjects) => {
+        return arr.map((item: IObject) => {
+            const { id } = item
+
             return (
                 <li className="list-group-item"
                     key={id}
-                    onClick={() => {props.onItemSelected(id)}}
+                    onClick={() => {onItemSelected(id)}}
+                    // eslint-disable-next-line no-console
                     onKeyDown={() => {console.log('key down')}}
                     role='menuitem' >
-                    {name}
+                    { children(item) }
                 </li>
             )
         })
     }
 
     const spinner = loading? <Spinner /> : null
-    const content = !loading? renderItems(peopleList as IPerson[]) : null
+    const content = !loading? renderItems(itemList as IObjects) : null
 
     return (
         <ul className="item-list list-group">
